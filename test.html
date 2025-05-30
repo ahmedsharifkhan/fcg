@@ -37,6 +37,8 @@
       border: 1px solid #ccc;
       background: #fafafa;
       position: relative;
+      min-height: 200px;
+      overflow: visible;
     }
     .comment-box {
       display: flex;
@@ -54,6 +56,8 @@
       padding: 8px 12px;
       border-radius: 18px;
       position: relative;
+      min-height: 40px;
+      word-wrap: break-word;
     }
     .comment-content p {
       margin: 5px 0 0;
@@ -74,8 +78,11 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 5px;
+      margin-top: 8px;
       flex-wrap: nowrap;
+      position: relative;
+      min-height: 40px;
+      padding-bottom: 30px;
     }
     .meta-left {
       font-size: 12px;
@@ -90,6 +97,8 @@
       gap: 4px;
       flex-shrink: 0;
       margin-left: auto;
+      position: relative;
+      padding-top: 10px;
     }
     .meta-right img {
       width: 18px;
@@ -149,13 +158,13 @@
           </div>
           <div class="meta-wrapper">
             <div class="meta-left">
-              <span id="previewDays">12m</span> &nbsp; Like &nbsp; Reply
+              <span id="previewDays">12m</span>   Like   Reply
             </div>
             <div class="meta-right">
               <span id="previewReact">2</span>
-              <img src="img/like.png" alt="like">
-              <img src="img/love.png" alt="love">
-              <img src="img/care.png" alt="care">
+              <img src="img/1.png" alt="like">
+              <img src="img/2.png" alt="love">
+              <img src="img/Untitled design.png" alt="care">
             </div>
           </div>
         </div>
@@ -193,8 +202,30 @@
       }
     });
 
-    function downloadComment() {
-      html2canvas(document.querySelector("#preview")).then(canvas => {
+    async function downloadComment() {
+      const preview = document.querySelector("#preview");
+      // Force reflow to ensure DOM is updated
+      preview.style.display = 'none';
+      preview.offsetHeight; // Trigger reflow
+      preview.style.display = '';
+
+      // Wait briefly to allow layout to stabilize
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Calculate exact dimensions
+      const scrollWidth = preview.scrollWidth;
+      const scrollHeight = preview.scrollHeight + 50; // Extra height for reactions
+
+      html2canvas(preview, {
+        useCORS: true,
+        scale: 2,
+        scrollX: 0,
+        scrollY: 0,
+        width: scrollWidth,
+        height: scrollHeight,
+        backgroundColor: "#fafafa",
+        logging: false // Disable logging for performance
+      }).then(canvas => {
         const link = document.createElement("a");
         link.download = 'comment.png';
         link.href = canvas.toDataURL("image/png");
