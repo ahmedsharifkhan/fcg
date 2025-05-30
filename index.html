@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fake Comment Generator</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -51,9 +50,33 @@
     }
     .comment-content {
       flex: 1;
+      background: #f0f2f5;
+      padding: 8px 12px;
+      border-radius: 18px;
     }
     .comment-content p {
-      margin: 5px 0;
+      margin: 5px 0 0;
+      font-size: 14px;
+    }
+    .meta-wrapper {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+    }
+    .meta-left {
+      font-size: 12px;
+      color: gray;
+    }
+    .meta-right {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      color: gray;
+      gap: 4px;
+    }
+    .meta-right img {
+      width: 16px;
+      height: 16px;
     }
     .download-btn {
       display: block;
@@ -72,8 +95,8 @@
     <div class="form-group">
       <label for="platform">Select Platform</label>
       <select id="platform">
-        <option value="tiktok">TikTok</option>
         <option value="facebook">Facebook</option>
+        <option value="tiktok">TikTok</option>
         <option value="twitter">Twitter</option>
         <option value="linkedin">LinkedIn</option>
       </select>
@@ -87,15 +110,36 @@
       <textarea id="comment" rows="3"></textarea>
     </div>
     <div class="form-group">
+      <label for="days">Time Ago</label>
+      <input type="text" id="days" placeholder="e.g. 12m">
+    </div>
+    <div class="form-group">
+      <label for="reactions">Number of Reactions</label>
+      <input type="number" id="reactions" placeholder="e.g. 2">
+    </div>
+    <div class="form-group">
       <label for="image">Profile Image</label>
       <input type="file" id="image" accept="image/*">
     </div>
     <div id="preview" class="preview">
       <div class="comment-box">
-        <img id="previewImg" src="https://via.placeholder.com/50" alt="">
-        <div class="comment-content">
+        <img id="previewImg" src="img/4086679.png" alt="noor icon">
+        <div style="width:100%">
           <strong id="previewName">Name</strong>
-          <p id="previewText">This is a sample comment</p>
+          <div class="comment-content">
+            <p id="previewText">This is a sample comment</p>
+          </div>
+          <div class="meta-wrapper">
+            <div class="meta-left">
+              <span id="previewDays">12m</span> &nbsp; Like &nbsp; Reply
+            </div>
+            <div class="meta-right">
+              <span id="previewReact">2</span>
+              <img src="img/like.svg" alt="like">
+              <img src="img/love.svg" alt="love">
+              <img src="img/care.svg" alt="care">
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -104,19 +148,23 @@
 
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script>
-    const nameInput = document.getElementById("name");
-    const commentInput = document.getElementById("comment");
-    const imageInput = document.getElementById("image");
-
-    nameInput.addEventListener("input", () => {
-      document.getElementById("previewName").textContent = nameInput.value;
+    document.getElementById("name").addEventListener("input", (e) => {
+      document.getElementById("previewName").textContent = e.target.value;
     });
 
-    commentInput.addEventListener("input", () => {
-      document.getElementById("previewText").textContent = commentInput.value;
+    document.getElementById("comment").addEventListener("input", (e) => {
+      document.getElementById("previewText").textContent = e.target.value;
     });
 
-    imageInput.addEventListener("change", (e) => {
+    document.getElementById("days").addEventListener("input", (e) => {
+      document.getElementById("previewDays").textContent = e.target.value;
+    });
+
+    document.getElementById("reactions").addEventListener("input", (e) => {
+      document.getElementById("previewReact").textContent = e.target.value;
+    });
+
+    document.getElementById("image").addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
