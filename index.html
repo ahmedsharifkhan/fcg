@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fake Comment Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 8px;
+    }
+    .preview {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      background: #fafafa;
+      position: relative;
+    }
+    .comment-box {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .comment-box img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+    .comment-content {
+      flex: 1;
+    }
+    .comment-content p {
+      margin: 5px 0;
+    }
+    .download-btn {
+      display: block;
+      margin: 20px auto 0;
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Fake Comment Generator</h2>
+    <div class="form-group">
+      <label for="platform">Select Platform</label>
+      <select id="platform">
+        <option value="tiktok">TikTok</option>
+        <option value="facebook">Facebook</option>
+        <option value="twitter">Twitter</option>
+        <option value="linkedin">LinkedIn</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name">
+    </div>
+    <div class="form-group">
+      <label for="comment">Comment</label>
+      <textarea id="comment" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="image">Profile Image</label>
+      <input type="file" id="image" accept="image/*">
+    </div>
+    <div id="preview" class="preview">
+      <div class="comment-box">
+        <img id="previewImg" src="https://via.placeholder.com/50" alt="">
+        <div class="comment-content">
+          <strong id="previewName">Name</strong>
+          <p id="previewText">This is a sample comment</p>
+        </div>
+      </div>
+    </div>
+    <button class="download-btn" onclick="downloadComment()">Download Comment</button>
+  </div>
+
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script>
+    const nameInput = document.getElementById("name");
+    const commentInput = document.getElementById("comment");
+    const imageInput = document.getElementById("image");
+
+    nameInput.addEventListener("input", () => {
+      document.getElementById("previewName").textContent = nameInput.value;
+    });
+
+    commentInput.addEventListener("input", () => {
+      document.getElementById("previewText").textContent = commentInput.value;
+    });
+
+    imageInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById("previewImg").src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function downloadComment() {
+      html2canvas(document.querySelector("#preview")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = 'comment.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+  </script>
+</body>
+</html>
